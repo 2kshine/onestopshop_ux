@@ -1,14 +1,14 @@
 #Take Base image and tweak a bit to have our custom image run in it
 FROM node:18
-WORKDIR /app
+WORKDIR /app_ux
 #Since workdir is pointer to a dir so only . is fine
 # if any of these layers steps change, lets say if 6 is changed, all the steps after that is going to re run
 COPY package.json ./
 RUN npm install
 #argument NODE_ENV value is going to be passed from docker compose environment file.
-ARG NODE_ENV
+ARG REACT_APP_ENV
 #then based on that scenario do the conditional.
-RUN if [ "$NODE_ENV" = "development" ]; \
+RUN if [ "$REACT_APP_ENV" = "development" ]; \
         then npm install; \
         else npm install --only=production; \
         fi

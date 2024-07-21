@@ -9,7 +9,7 @@ services:
     env_file:
       - ./.env.prod
     command: npm run build
-    container_name: onestopshop-prod
+    container_name: onestopshop_ux_prod
 
   nginx:
     build:
