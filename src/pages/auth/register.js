@@ -1,22 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { Avatar, Button, IconButton, TextField, FormControlLabel, Checkbox, CircularProgress, Link, Grid, Box, Typography, Paper, Fade, InputAdornment } from '@mui/material';
+import { Avatar, Button, TextField, FormControlLabel, Checkbox, CircularProgress, Link, Grid, Box, Typography, Paper, Fade } from '@mui/material';
 import Copyright from '../../components/footer/copyright';
 import HomeIcon from '@mui/icons-material/Home';
 import { useTheme } from '@mui/material/styles';
 import { useFormik } from 'formik';
 import { registerUser } from '../../axios/axios-requests';
 import RegisterSchema from '../../validations/schema/register-schema';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useNavigate } from 'react-router-dom';
-
+import ErrorAlerts from "../../components/alerts/alerts"
 const Register = () => {
   const theme = useTheme();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [fadeIn, setFadeIn] = useState(true);
   const [agreeForm, setAgreeForm] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [hidePassword, setHidePassword] = useState(true);
   const [showEmailError, setShowEmailError] = useState(false);
   const [error, setError] = useState('');
   const images = [
@@ -24,8 +21,8 @@ const Register = () => {
     '/images/login/image2.jpg',
     '/images/login/image3.jpg'
   ];
-  const queryParameters = new URLSearchParams(window.location.search);
-  const confirmationToken = queryParameters.get('confirmation_token');
+  // const queryParameters = new URLSearchParams(window.location.search);
+  // const confirmationToken = queryParameters.get('confirmation_token');
   useEffect(() => {
     const interval = setInterval(() => {
       setFadeIn(false); // Fade out
@@ -37,41 +34,39 @@ const Register = () => {
     return () => clearInterval(interval);
         //eslint-disable-next-line
   }, []);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const handleAgreeForm = (e) => {
     setAgreeForm(e.target.checked);
-  };
-  // Password visibility toggle
-  const handleClickShowPassword = () => setHidePassword((show) => !show);
-
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
   };
 
   // Initialize formik with initial values
   const formik = useFormik({
     initialValues: {
       email_address: '',
-      password: ''
+      username: ''
     },
     validationSchema: RegisterSchema,
+    validateOnBlur:true,
+    validateOnChange:false,
     onSubmit: async (values) => {
-      setLoading(true);
-      // check if email is available
-      setTimeout(async () => {
-        const createUser = await registerUser(values);
-        if (createUser.data.code === 'USER_REGISTER_SUCCESS') {
-          localStorage.setItem('accessToken', createUser.data.token);
-          localStorage.setItem('email_address', values.email_address);
-          navigate('/user-profile');
-          // implement redux
-        }else{
-          setShowEmailError(true);
-          setError('Failed to register the user atm. Please try again later.');
-        }
-        setShowEmailError(true);
-        setLoading(false);
-      }, 2000);
+      console.log(values);
+      // setLoading(true);
+      // Register email address
+      setShowEmailError(true);
+      let random = Math.random(0, 10)
+      setError(`Failed to register the user atm. Please try again later. ${random}`);
+      // const createUser = await registerUser(values);
+      // setTimeout(async () => {
+      //   // navigate('/user-profile');
+      //   // implement redux
+      //   if (createUser.data.status !== 201) {
+      //     setShowEmailError(true);
+      //     setError('Failed to register the user atm. Please try again later.');
+      //   }
+      //   localStorage.setItem('accessToken', createUser.data.token);
+      //   localStorage.setItem('email_address', values.email_address);
+      //   setLoading(false);
+      // }, 2000);
     }
   });
   return (
@@ -135,6 +130,26 @@ const Register = () => {
             One-Stop-Shop Register
           </Typography>
           <Box component="form" alignItems={'center'} noValidate sx={{ mt: 1 }} onSubmit={formik.handleSubmit}>
+          <TextField
+              margin="dense"
+              required
+              variant='outlined'
+              fullWidth
+              name="username"
+              value={formik.values.username}
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              label="Username"
+              id="username"
+              helperText={
+                formik.touched.username && formik.errors.username 
+              }
+              error={
+                formik.touched.username 
+                &&
+                Boolean(formik.errors.username)
+              }
+            />
             <TextField
               margin="dense"
               variant='outlined'
@@ -152,41 +167,6 @@ const Register = () => {
               error={
                 formik.touched.email_address && Boolean(formik.errors.email_address)
               }
-            />
-            <TextField
-              margin="dense"
-              required
-              variant='outlined'
-              fullWidth
-              name="password"
-              value={formik.values.password}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              label="Password"
-              type={hidePassword ? 'password' : 'text'}
-              id="password"
-              autoComplete="Use complex password"
-              helperText={
-                formik.touched.password && formik.errors.password
-              }
-              error={
-                formik.touched.password && Boolean(formik.errors.password)
-              }
-              InputProps={{
-                endAdornment:
-                  <InputAdornment position='end'>
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
-                      edge="end"
-                    >
-                      {hidePassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-
-              }}
-
             />
             <FormControlLabel
               onClick={handleAgreeForm}
@@ -211,7 +191,7 @@ const Register = () => {
                     variant="contained"
                     sx={{ mt: 3, mb: 2 }}
                   >
-                    Register As a User
+                    Register User
                     </Button>)
                   : (<Button
                     disabled
@@ -220,7 +200,7 @@ const Register = () => {
                     variant="contained"
                     sx={{ mt: 3, mb: 2 }}
                   >
-                    Register As a User
+                    Register User
                     </Button>)
               }
             </div>
@@ -233,6 +213,7 @@ const Register = () => {
             </Grid>
             <Copyright sx={{ mt: 5 }} />
           </Box>
+          <ErrorAlerts message={error} />
         </Box>
       </Grid>
     </Grid>

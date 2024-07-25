@@ -9,18 +9,18 @@ const CommonAxiosError = (err) => {
       window.location.reload();
     }
   }
-  if (axios.isAxiosError(err)) {
+  if (err.name.toLowerCase() === "axioserror") {
     if (err.code === 'ECONNABORTED') {
       console.log('Timeout Error:', err.message);
       alert('Request Timedout.');
       window.location.reload(false);
     }
-  } else {
-    // Something happened in setting up the request that triggered an Error
-    console.log('Error', err.message);
-    alert('Unknown error occured.');
-    window.location.reload(false);
-  }
+    console.log('Axios Error Detected', err);
+    return err
+  } 
+  console.log('Error', err);
+  alert('Something went wrong. Please try again.');
+  window.location.reload(false);
 };
 
 export default CommonAxiosError;
