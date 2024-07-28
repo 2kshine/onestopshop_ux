@@ -1,20 +1,24 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useMemo } from 'react';
 import Alert from '@mui/material/Alert';
-import AlertTitle from '@mui/material/AlertTitle';
 import Stack from '@mui/material/Stack';
 import { useTheme } from '@mui/material/styles';
 import { Typography, Slide } from '@mui/material';
-import './alerts.css'
-export default function ErrorAlerts({message}) {
+import './alerts.css';
+import PropTypes from 'prop-types';
+
+const Alerts = ({ id, message, type }) => {
   const theme = useTheme();
-  const [open, setOpen] = useState(true);
   const [alerts, setAlerts] = useState([]);
-  useEffect(() => {
+  // const timeoutsRef = useRef([]); // Ref to store timeout IDs
+
+  // const [timer, setTimer] = useState([]);
+  useMemo(() => {
     if (message) {
       // Add new alert to the top of the stack
       const newAlert = {
-        id: new Date().getTime(), // Unique ID for each alert
-        message: message,
+        id, // Unique ID for each alert
+        message,
+        type,
       };
 
       // Add the new alert to the end of the stack
@@ -22,12 +26,13 @@ export default function ErrorAlerts({message}) {
 
       // Automatically remove after 10 seconds
       const timer = setTimeout(() => {
-        setAlerts((prevAlerts) => prevAlerts.filter((alert) => alert.id !== newAlert.id));
-      }, 10000);
-
+        setAlerts((prevAlerts) =>
+          prevAlerts.filter((alert) => alert.id !== newAlert.id)
+        );
+      }, 5000);
       return () => clearTimeout(timer);
     }
-  }, [message]);
+  }, [id]);
 
   const handleClose = (id) => {
     setAlerts((prevAlerts) => prevAlerts.filter((alert) => alert.id !== id));
@@ -39,16 +44,16 @@ export default function ErrorAlerts({message}) {
         position: 'fixed',
         bottom: theme.spacing(2),
         right: theme.spacing(2),
-        zIndex: 9999, 
+        zIndex: 9999,
         width: '35%',
       }}
       spacing={2}
     >
       {alerts.map((alert) => (
-        <Slide direction="left" key={alert.id} in={true} mountOnEnter unmountOnExit>
-          <div className="error-alert-slide">
+        <Slide direction="left" key={alert.id} in mountOnEnter unmountOnExit>
+          <div className={`${type.toLowerCase()}-alert-slide`}>
             <Alert
-              severity="error"
+              severity={alert.type.toLowerCase()}
               variant="filled"
               onClose={() => handleClose(alert.id)}
               sx={{
@@ -59,11 +64,19 @@ export default function ErrorAlerts({message}) {
                 borderBottomRightRadius: '2px',
               }}
             >
-              <Typography variant="body1"><b>Error:</b> {alert.message}</Typography>
+              <Typography variant="body1">{alert.message}</Typography>
             </Alert>
           </div>
         </Slide>
       ))}
     </Stack>
   );
-}
+};
+
+Alerts.propTypes = {
+  id: PropTypes.string.isRequired,
+  message: PropTypes.string.isRequired,
+  type: PropTypes.oneOf(['ERROR', 'SUCCESS', 'WARN']).isRequired,
+};
+
+export default Alerts;

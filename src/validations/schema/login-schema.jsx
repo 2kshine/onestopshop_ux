@@ -5,6 +5,6 @@ const LoginSchema = yup.object().shape({
     .string()
     .email('Invalid email')
     .required('Email is required'),
-  password: yup.string().required('Password is required')
+  password: yup.string().required('Password is required'),
 });
 export default LoginSchema;

@@ -1,16 +1,15 @@
 import React from 'react';
 import { Container } from '@mui/material';
-import {
-  RouterProvider
-} from 'react-router-dom';
+import { RouterProvider } from 'react-router-dom';
 
 import router from './routes/router';
-const App = () => {
+
+function App() {
   return (
-    <Container maxWidth='false' disableGutters>
+    <Container maxWidth="false" disableGutters>
       <RouterProvider router={router} />
     </Container>
   );
-};
+}
 
 export default App;

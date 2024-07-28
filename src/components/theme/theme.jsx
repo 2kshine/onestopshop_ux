@@ -4,24 +4,24 @@ import { createTheme } from '@mui/material/styles';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#2E77AF'
+      main: '#2E77AF',
     },
     secondary: {
-      main: '#F5A623'
+      main: '#F5A623',
     },
     error: {
-      main: '#FF4136'
+      main: '#FF4136',
     },
     warning: {
-      main: '#FF851B'
+      main: '#FF851B',
     },
     info: {
-      main: '#39CCCC'
+      main: '#39CCCC',
     },
     success: {
-      main: '#2ECC40'
-    }
-  }
+      main: '#2ECC40',
+    },
+  },
 });
 
 export default theme;

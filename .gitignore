@@ -55,7 +55,7 @@ web_modules/
 .eslintcache
 
 # Optional stylelint cache
-.stylelintcache
+# .stylelintcache
 
 # Microbundle cache
 .rpt2_cache/
