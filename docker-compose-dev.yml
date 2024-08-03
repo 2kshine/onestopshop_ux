@@ -1,0 +1,15 @@
+version: '2'
+
+services:
+  onestopshop_ux:
+    build:
+      context: .
+      args: 
+        NODE_ENV: development
+    volumes:
+      - ./src:/app_ux/src  # Mount local src directory for hot-reloading
+      - /app_ux/node_modules  # Avoid volume on node_modules to speed up performance
+    env_file:
+      - ./.env
+    command: npm run start
+    container_name: onestopshop_ux_dev

@@ -1,0 +1,7 @@
+version: '2'
+
+services:
+  onestopshop_ux:
+    build: .
+    ports:
+      - "3000:3000"  # Map host port 3000 to container port 3000 for development
