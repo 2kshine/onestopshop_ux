@@ -24,6 +24,7 @@ import {
 } from '../../axios/axios-requests';
 import RegisterSchema from '../../validations/schema/register-schema';
 import Alerts from '../../components/alerts/alerts';
+import { ENUM_ALERT_TYPE } from '../../enum/enum';
 
 function Register() {
   const theme = useTheme();
@@ -35,7 +36,6 @@ function Register() {
   const [alertType, setAlertType] = useState(null);
   const [alertMessage, setAlertMessage] = useState('');
   const [alertTime, setAlertTime] = useState('');
-  const { ENUM_ALERT_TYPE } = process.env;
 
   const images = [
     '/images/login/image1.jpg',
@@ -78,7 +78,7 @@ function Register() {
       setLoading(true);
       // Register user
       const registerUserResponse = await registerUser(values);
-      console.log('registerUserResponse', registerUserResponse);
+      // console.log('registerUserResponse', registerUserResponse);
       setTimeout(async () => {
         if (registerUserResponse.status !== 201) {
           handleAlerts(
@@ -102,7 +102,6 @@ function Register() {
   const resendEmailVerificationLink = async () => {
     // Resend email verification link
     const values = localStorage.getItem('user-credentials');
-    console.log(JSON.parse(values));
     const parsedValues = JSON.parse(values);
     const response = await resendEmailVerification(parsedValues);
     if (response?.status === 202) {

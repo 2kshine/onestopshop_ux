@@ -69,11 +69,10 @@ function SetPassword() {
       // Set user password
       const setPasswordResponse = await setPassword(values);
       setTimeout(async () => {
-        console.log('registerUserResponse', setPasswordResponse);
         setLoading(false);
-        console.log('setPasswordResponse', setPasswordResponse);
+        // console.log('setPasswordResponse', setPasswordResponse);
         if (setPasswordResponse.status && setPasswordResponse.status === 201) {
-          window.location.href = '/dashboard';
+          window.location.href = '/user-profile';
         } else {
           handleAlerts(
             ENUM_ALERT_TYPE[0],

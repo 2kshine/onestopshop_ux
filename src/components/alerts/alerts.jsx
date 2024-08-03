@@ -76,7 +76,7 @@ const Alerts = ({ id, message, type }) => {
 Alerts.propTypes = {
   id: PropTypes.string.isRequired,
   message: PropTypes.string.isRequired,
-  type: PropTypes.oneOf(['ERROR', 'SUCCESS', 'WARN']).isRequired,
+  type: PropTypes.oneOf(['ERROR', 'SUCCESS', 'WARNING']).isRequired,
 };
 
 export default Alerts;

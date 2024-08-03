@@ -1,7 +1,6 @@
 import axios from 'axios';
 import {
   PrivateAxiosInstance,
-  PublicAxiosInstance,
   PrivateAxiosInstanceFileUpload,
 } from './axios-instance';
 
@@ -16,7 +15,7 @@ const AxiosRequest = async (
   endpoint,
   requestType,
   requestNature,
-  values = ''
+  values = {}
 ) => {
   try {
     // Check if the requestNature is Private or Public
@@ -27,12 +26,11 @@ const AxiosRequest = async (
       HEADERS[REACT_APP_AUTHORIZATION_NAME] = `Bearer ${token}`;
       HEADERS.cookie = document.cookie;
     }
+    console.log('HEADERS', HEADERS);
     if (requestType === 'post') {
       const axiosResponse = await axiosInstance.post(endpoint, values, {
         headers: HEADERS,
       });
-      console.log(REACT_APP_AUTHORIZATION_NAME);
-      console.log(axiosResponse.headers[REACT_APP_AUTHORIZATION_NAME]);
       if (axiosResponse.headers[REACT_APP_AUTHORIZATION_NAME]) {
         // For now store the token in local storage
         localStorage.setItem(
@@ -57,26 +55,12 @@ export const registerUser = async (values) => {
 
 // User login
 export const loginUser = async (values) => {
-  try {
-    return await PublicAxiosInstance.post('/auth/login', values);
-  } catch (err) {
-    console.log(err);
-  }
+  return await AxiosRequest('/auth/login', 'post', 'public', values);
 };
 
 // Logout User
 export const logoutUser = async () => {
-  try {
-    const response = await PrivateAxiosInstance.post('/auth/logout');
-    if (response) {
-      if (response.headers.token) {
-        localStorage.setItem('accessToken', response.headers.token);
-      }
-    }
-    return response;
-  } catch (err) {
-    console.log(err);
-  }
+  return await AxiosRequest('/auth/logout', 'post', 'private');
 };
 
 // Update user profiles.
@@ -106,11 +90,17 @@ export const checkIfEmailOrUserIsAvailable = async (values) => {
 
 // Send Six Digit password code email.
 export const sendEmailPasswordReset = async (values) => {
-  try {
-    return await PublicAxiosInstance.post('/auth/change-password-code', values);
-  } catch (err) {
-    console.log(err);
-  }
+  return await AxiosRequest(
+    '/auth/change-password-code',
+    'post',
+    'public',
+    values
+  );
+};
+
+// Verify Six Digit password code
+export const verifyCodePasswordReset = async (values) => {
+  return await AxiosRequest('/auth/change-password', 'post', 'public', values);
 };
 
 // Change password action

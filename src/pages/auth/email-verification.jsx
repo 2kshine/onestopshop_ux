@@ -81,10 +81,10 @@ function EmailVerification() {
       // Resend email verification link
       const resendEmailVerificationResponse =
         await resendEmailVerification(values);
-      console.log(
-        'resendEmailVerificationResponse',
-        resendEmailVerificationResponse
-      );
+      // console.log(
+      //   'resendEmailVerificationResponse',
+      //   resendEmailVerificationResponse
+      // );
       setTimeout(async () => {
         setLoadingButton(false);
 

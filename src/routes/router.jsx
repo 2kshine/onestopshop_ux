@@ -8,8 +8,9 @@ import Login from '../pages/auth/login';
 import Register from '../pages/auth/register';
 import SetPassword from '../pages/auth/set-password';
 import EmailVerification from '../pages/auth/email-verification';
-import Dashboard from '../pages/dashboard';
-
+import UserProfile from '../pages/user-profile';
+import UnauthorizedPage from '../pages/unauthorised';
+import ResetPassword from '../pages/auth/reset-password';
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
@@ -18,7 +19,9 @@ const router = createBrowserRouter(
       <Route path="/user-register" element={<Register />} />
       <Route path="/set-password" element={<SetPassword />} />
       <Route path="/verify-emailaddress" element={<EmailVerification />} />
-      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/user-profile" element={<UserProfile />} />
+      <Route path="/unauthorized" element={<UnauthorizedPage />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
     </Route>
   )
 );
